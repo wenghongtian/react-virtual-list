@@ -11,40 +11,67 @@ import "./index.css";
 import { CompareResult, binarySearch } from "./utils";
 import Item from "./Item";
 import { useDebounceFn } from "./useDebounceFn";
-
-interface VirtualListProps<T extends object> {
-  renderItem(data: T, index: number): ReactNode;
-  dataSource: T[];
-  total: number;
-  bufferSize?: number;
-  itemOffset?: number;
-  estimateHeight?: number;
-  empty?: ReactNode;
-  rowKey?: keyof T;
-  onScroll?: React.UIEventHandler<HTMLDivElement>;
-  onScrollToEnd?: () => void;
-}
-
-interface CachePosition {
-  index: number;
-  top: number;
-  bottom: number;
-  height: number;
-}
+import { VirtualListProps, CachePosition } from "./types";
+import ReactLoading from "react-loading";
 
 function VirtualList<T extends object>(props: VirtualListProps<T>) {
   const {
-    total,
     estimateHeight = 100,
     empty,
-    dataSource,
     bufferSize = 5,
     itemOffset = 10,
     renderItem,
     rowKey,
+    pagination: { current = 1, pageSize = 20 } = {},
+    request,
+    loadingRender = (
+      <>
+        <ReactLoading
+          type="spinningBubbles"
+          color="#1677ff"
+          width={30}
+          height={30}
+        />
+        <span>正在加载</span>
+      </>
+    ),
   } = props;
   const [height, setHeight] = useState(window.innerHeight);
   const [dataPositionMap] = useState(() => new Map<T, CachePosition>());
+
+  const [loading, setLoading] = useState(false);
+  const [dataSource, setDataSource] = useState<T[]>([]);
+  const pageRef = useRef({
+    pageSize,
+    current,
+    noMore: false,
+  });
+
+  async function fetchData() {
+    const pageInfo = pageRef.current;
+    setLoading(true);
+    const { list, noMore } = await request({
+      current: pageInfo.current,
+      pageSize: pageInfo.pageSize,
+    });
+    setLoading(false);
+    setDataSource(dataSource.concat(list));
+    pageInfo.current++;
+    pageInfo.pageSize++;
+    pageInfo.noMore = noMore;
+    containerInfo.current.endIndex = Math.min(
+      limit + containerInfo.current.startIndex,
+      list.length + containerInfo.current.startIndex
+    );
+    return {
+      list,
+      noMore,
+    };
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const [, forceUpdate] = useReducer((n) => n + 1, 0);
 
@@ -58,7 +85,6 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
 
   const cachePositions = useMemo(() => {
     const positions: CachePosition[] = new Array(dataSource.length);
-    console.log(dataSource.length, dataPositionMap.size);
     for (let i = 0; i < dataSource.length; i++) {
       const data = dataSource[i];
       if (dataPositionMap.has(data)) {
@@ -92,7 +118,7 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
   const containerInfo = useRef({
     startIndex: 0,
     originIndex: 0,
-    endIndex: Math.min(total, limit + bufferSize),
+    endIndex: Math.min(dataSource.length, limit + bufferSize),
   });
 
   function getStartIndex(scrollTop: number) {
@@ -109,28 +135,27 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
     return cachePositions[index].top === scrollTop ? index : index + 1;
   }
 
-  const { run: triggerOnScrollToEnd } = useDebounceFn(
-    () => {
-      props.onScrollToEnd?.();
-    },
-    { wait: 100 }
-  );
-
   const containerRef = useRef<HTMLDivElement>(null);
   const handleScroll: React.UIEventHandler<HTMLDivElement> = (evt) => {
+    if (evt.target !== containerRef.current) return;
     const st: number = (evt.target as any).scrollTop;
     const originIndex = getStartIndex(st);
     containerInfo.current.originIndex = originIndex;
     containerInfo.current.startIndex = Math.max(0, originIndex - bufferSize);
     containerInfo.current.endIndex = Math.min(
-      total,
+      dataSource.length,
       originIndex + limit + bufferSize
     );
     setScrollTop(st);
     props.onScroll?.(evt);
     const totalHeight = cachePositions.at(-1)?.bottom || 0;
-    if (st > scrollTop && st >= totalHeight - height - 100) {
-      triggerOnScrollToEnd();
+    if (
+      st > scrollTop &&
+      st >= totalHeight - height - 100 &&
+      !pageRef.current.noMore &&
+      !loading
+    ) {
+      fetchData();
     }
   };
 
@@ -145,7 +170,6 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
     }
     forceUpdate();
   }
-  // console.log(cachePositions.length, dataPositionMap.size, dataSource.length);
 
   function onHeightUpdate(index: number, height: number) {
     const position = cachePositions[index];
@@ -179,12 +203,16 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
 
   return (
     <div className="rvl-container" onScroll={handleScroll} ref={containerRef}>
-      <div
-        className="rvl-placeholder"
-        style={{ height: cachePositions.at(-1)?.bottom || 0 }}
-      />
-      {!total && empty}
+      <div>
+        <div
+          className="rvl-placeholder"
+          style={{ height: cachePositions.at(-1)?.bottom || 0 }}
+        />
+        {pageRef.current.noMore && <div className='rvl-no-more'>---我也是有底线的---</div>}
+      </div>
+      {!dataSource.length && pageRef.current.noMore && empty}
       {renderRowContent()}
+      {loading && <div className="rvl-loading">{loadingRender}</div>}
     </div>
   );
 }

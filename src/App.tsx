@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import VirtualList from "./VirtualList";
+
+const sleep = (timeout: number) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, timeout);
+  });
+};
 
 function getRandomColor() {
   const letters = "0123456789ABCDEF";
@@ -56,25 +64,24 @@ const App = () => {
   });
 
   return (
-    <div style={{ height: 400 }}>
+    <div style={{ height: "100%" }}>
       <VirtualList<Data>
-        dataSource={dataSource}
-        total={dataSource.length}
         renderItem={(data) => {
           return <Item {...data} />;
         }}
-        onScrollToEnd={() => {
-          setDataSource(() =>
-            dataSource.concat(
-              new Array(10).fill("").map((i, index) => ({
-                name: Math.random().toString().slice(0, 10),
-                color: getRandomColor(),
-                height: getRandomHeight(),
-                delayHeight: getRandomHeight(),
-                id: dataSource.length + index + "",
-              }))
-            )
-          );
+        empty="暂无数据"
+        request={async ({ pageSize, current }) => {
+          await sleep(1000);
+          return {
+            list: new Array(10).fill("").map((i, index) => ({
+              name: Math.random() + "",
+              color: getRandomColor(),
+              height: getRandomHeight(),
+              delayHeight: getRandomHeight(),
+              id: pageSize * (current - 1) + index + "",
+            })),
+            noMore: current >= 5,
+          };
         }}
       />
     </div>
