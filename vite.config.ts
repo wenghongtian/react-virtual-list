@@ -5,6 +5,8 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   build: {
-    target: "./src/index.ts",
+    lib: {
+      entry: "./src/index.ts",
+    },
   },
 });

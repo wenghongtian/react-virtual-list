@@ -1,11 +1,9 @@
-$prefix: 'rvl';
-
 .rvl-container {
   height: 100%;
-  position: absolute;
+  position: relative;
+  overflow-y: scroll;
 }
 .rvl-placeholder {
-
 }
 
 .rvl-wrapper {
@@ -14,4 +12,6 @@ $prefix: 'rvl';
 
 .rvl-item {
   position: absolute;
+  top: 0;
+  width: 100%;
 }
