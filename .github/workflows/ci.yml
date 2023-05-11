@@ -24,18 +24,15 @@ jobs:
         id: gen-version
         run: |
           pnpm ci:version
-          echo "::set-output name=version::$(npx read-pkg-version)"
       - run: pnpm build
       - name: Publish to GitHub Package Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.gen-version.outputs.version != ''
         run: |
           pnpm publish --access public --registry https://npm.pkg.github.com/
 
       - name: Publish to NPM Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: steps.gen-version.outputs.version != ''
         run: |
           pnpm publish --access public --tag latest --registry https://registry.npmjs.org/
