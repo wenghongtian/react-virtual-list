@@ -26,7 +26,6 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "changeset": "changeset",
-    "version": "changeset version && pnpm install",
     "ci:publish": "pnpm publish --access public",
     "ci:version": "changeset version && pnpm install"
   },
