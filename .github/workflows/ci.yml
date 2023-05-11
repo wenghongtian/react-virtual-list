@@ -25,14 +25,16 @@ jobs:
         run: |
           pnpm ci:version
       - run: pnpm build
-      - name: Publish to GitHub Package Registry
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm publish --no-git-checks --access public --registry https://npm.pkg.github.com/
-
-      - name: Publish to NPM Registry
+      - run: pnpm publish --no-git-checks --access public
+        name: Publish To Npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          pnpm publish --no-git-checks --access public --tag latest --registry https://registry.npmjs.org/
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@wenghongtian'
+      - run: pnpm publish --no-git-checks --access public
+        name: Publish To Github
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
