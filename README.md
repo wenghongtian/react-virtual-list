@@ -23,6 +23,7 @@ react不定高虚拟列表，支持高度自动计算。
 ```tsx
 import { useState } from "react";
 import VirtualList from "@wenghongtian/react-virtual-list";
+import from "@wenghongtian/react-virtual-list/lib/style.css"
 
 const sleep = (timeout: number) => {
   return new Promise<void>((resolve) => {

@@ -9,6 +9,7 @@
   "main": "./lib/react-virtual-list.umd.cjs",
   "module": "./lib/react-virtual-list.js",
   "exports": {
+    "./lib/": "./lib/",
     ".": {
       "import": "./lib/react-virtual-list.js",
       "require": "./lib/react-virtual-list.umd.cjs"
@@ -35,7 +36,8 @@
   },
   "homepage": "https://github.com/wenghongtian/react-virtual-list",
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "repository": {
     "type": "git",
