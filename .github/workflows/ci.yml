@@ -29,10 +29,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm publish --access public --registry https://npm.pkg.github.com/
+          pnpm publish --no-git-checks --access public --registry https://npm.pkg.github.com/
 
       - name: Publish to NPM Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          pnpm publish --access public --tag latest --registry https://registry.npmjs.org/
+          pnpm publish --no-git-checks --access public --tag latest --registry https://registry.npmjs.org/
