@@ -1,14 +1,45 @@
 {
-  "name": "react-virtual-list",
+  "name": "@wenghongtian/react-virtual-list",
+  "description": "React VirtualList",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "types": "./src/index.ts",
+  "typings": "./lib/index.d.ts",
+  "types": "./lib/index.d.ts",
+  "main": "./lib/react-virtual-list.umd.cjs",
+  "module": "./lib/react-virtual-list.js",
+  "exports": {
+    ".": {
+      "import": "./lib/react-virtual-list.js",
+      "require": "./lib/react-virtual-list.umd.cjs"
+    }
+  },
+  "keywords": [
+    "react",
+    "react-virtual-list",
+    "virtual-list"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
+  },
+  "author": {
+    "name": "wenghongtian",
+    "email": "wenghongtian@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wenghongtian/react-virtual-list/issues"
+  },
+  "homepage": "https://github.com/wenghongtian/react-virtual-list",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wenghongtian/react-virtual-list"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -23,7 +54,9 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "react-docgen-typescript": "^2.2.2",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "vite-plugin-dts": "^2.3.0"
   }
 }

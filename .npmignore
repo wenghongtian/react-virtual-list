@@ -1,0 +1,9 @@
+src/
+index.html
+.eslintrc.cjs
+.gitignore
+.npmignore
+vite.config.js
+tsconfig.json
+tsconfig.node.json
+public/

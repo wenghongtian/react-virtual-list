@@ -212,7 +212,6 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
         )}
         {loading && <div className="rvl-loading">{loadingRender}</div>}
       </div>
-
       {renderRowContent()}
     </div>
   );
