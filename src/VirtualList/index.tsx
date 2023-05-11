@@ -17,13 +17,14 @@ import ReactLoading from "react-loading";
 function VirtualList<T extends object>(props: VirtualListProps<T>) {
   const {
     estimateHeight = 100,
-    empty,
+    empty = "暂无数据~",
     bufferSize = 5,
     itemOffset = 10,
     renderItem,
     rowKey,
     pagination: { current = 1, pageSize = 20 } = {},
     request,
+    noMoreRender = "---我也是有底线的---",
     loadingRender = (
       <>
         <ReactLoading
@@ -151,7 +152,7 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
     const totalHeight = cachePositions.at(-1)?.bottom || 0;
     if (
       st > scrollTop &&
-      st >= totalHeight - height - 100 &&
+      st == totalHeight - height &&
       !pageRef.current.noMore &&
       !loading
     ) {
@@ -208,11 +209,16 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
           className="rvl-placeholder"
           style={{ height: cachePositions.at(-1)?.bottom || 0 }}
         />
-        {pageRef.current.noMore && <div className='rvl-no-more'>---我也是有底线的---</div>}
+        {pageRef.current.noMore && !!dataSource.length && (
+          <div className="rvl-no-more">{noMoreRender}</div>
+        )}
+        {!dataSource.length && pageRef.current.noMore && (
+          <div className="rvl-empty">{empty}</div>
+        )}
+        {loading && <div className="rvl-loading">{loadingRender}</div>}
       </div>
-      {!dataSource.length && pageRef.current.noMore && empty}
+
       {renderRowContent()}
-      {loading && <div className="rvl-loading">{loadingRender}</div>}
     </div>
   );
 }

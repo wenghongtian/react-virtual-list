@@ -53,23 +53,12 @@ type Data = {
 };
 
 const App = () => {
-  const [dataSource, setDataSource] = useState(() => {
-    return new Array(10).fill("").map((i, index) => ({
-      name: Math.random().toString().slice(0, 10),
-      color: getRandomColor(),
-      height: 100 || getRandomHeight(),
-      delayHeight: getRandomHeight(),
-      id: index + "",
-    }));
-  });
-
   return (
     <div style={{ height: "100%" }}>
       <VirtualList<Data>
         renderItem={(data) => {
           return <Item {...data} />;
         }}
-        empty="暂无数据"
         request={async ({ pageSize, current }) => {
           await sleep(1000);
           return {
@@ -80,7 +69,7 @@ const App = () => {
               delayHeight: getRandomHeight(),
               id: pageSize * (current - 1) + index + "",
             })),
-            noMore: current >= 5,
+            noMore: current > 5,
           };
         }}
       />

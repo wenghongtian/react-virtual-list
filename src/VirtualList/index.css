@@ -6,6 +6,15 @@
 .rvl-placeholder {
 }
 
+.rvl-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  color: #ccc;
+  font-size: 12px;
+}
+
 .rvl-wrapper {
   position: absolute;
 }
@@ -16,7 +25,7 @@
   width: 100%;
 }
 .rvl-loading {
-  position: sticky;
+  /* position: sticky; */
   display: flex;
   align-items: center;
   justify-content: center;

@@ -32,4 +32,5 @@ export interface VirtualListProps<T extends object> {
   request: Request<T>;
   pagination?: Pagination;
   loadingRender?: ReactNode;
+  noMoreRender?: ReactNode;
 }
