@@ -25,6 +25,13 @@ jobs:
         run: |
           pnpm ci:version
       - run: pnpm build
+      - name: Login to NPM
+        run: npm adduser --registry=https://registry.npmjs.org/ --scope=@wenghongtian --always-auth
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_EMAIL: wenghongtian@gmail.com
+          NPM_USERNAME: wenghongtian
+          NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
       - run: pnpm publish --no-git-checks --access public
         name: Publish To Npm
         env:
