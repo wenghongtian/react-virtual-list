@@ -25,7 +25,7 @@ jobs:
         run: |
           pnpm ci:version
           echo "::set-output name=version::$(npx read-pkg-version)"
-      - run: pnpm ci:build
+      - run: pnpm build
       - name: Publish to GitHub Package Registry
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
