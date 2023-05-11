@@ -210,7 +210,7 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
         {!dataSource.length && pageRef.current.noMore && (
           <div className="rvl-empty">{empty}</div>
         )}
-        {true && <div className="rvl-loading">{loadingRender}</div>}
+        {loading && <div className="rvl-loading">{loadingRender}</div>}
       </div>
 
       {renderRowContent()}
