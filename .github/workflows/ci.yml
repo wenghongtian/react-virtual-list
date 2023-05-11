@@ -1,4 +1,4 @@
-name: Release
+name: CI
 on:
   push:
     branches:
@@ -18,7 +18,8 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: '16.x'
+          cache: 'pnpm'
       - name: install pnpm
         run: npm i pnpm@latest -g
       - name: Setup npmrc
