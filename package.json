@@ -26,7 +26,9 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "changeset": "changeset",
-    "version": "changeset version && pnpm install"
+    "version": "changeset version && pnpm install",
+    "ci:publish": "pnpm publish -r",
+    "ci:version": "changeset version && pnpm install"
   },
   "author": {
     "name": "wenghongtian",
