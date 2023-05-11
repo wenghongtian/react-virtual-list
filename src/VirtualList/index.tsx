@@ -12,7 +12,7 @@ import { CompareResult, binarySearch } from "./utils";
 import Item from "./Item";
 import { useDebounceFn } from "./useDebounceFn";
 import { VirtualListProps, CachePosition } from "./types";
-import ReactLoading from "react-loading";
+import Spin from "./Spin";
 
 function VirtualList<T extends object>(props: VirtualListProps<T>) {
   const {
@@ -27,12 +27,7 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
     noMoreRender = "---我也是有底线的---",
     loadingRender = (
       <>
-        <ReactLoading
-          type="spinningBubbles"
-          color="#1677ff"
-          width={30}
-          height={30}
-        />
+        <Spin />
         <span>正在加载</span>
       </>
     ),
@@ -215,7 +210,7 @@ function VirtualList<T extends object>(props: VirtualListProps<T>) {
         {!dataSource.length && pageRef.current.noMore && (
           <div className="rvl-empty">{empty}</div>
         )}
-        {loading && <div className="rvl-loading">{loadingRender}</div>}
+        {true && <div className="rvl-loading">{loadingRender}</div>}
       </div>
 
       {renderRowContent()}

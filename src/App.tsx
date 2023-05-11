@@ -62,7 +62,7 @@ const App = () => {
         request={async ({ pageSize, current }) => {
           await sleep(1000);
           return {
-            list: new Array(10).fill("").map((i, index) => ({
+            list: new Array(10).fill("").map((_i, index) => ({
               name: Math.random() + "",
               color: getRandomColor(),
               height: getRandomHeight(),
