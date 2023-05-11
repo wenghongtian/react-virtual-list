@@ -24,18 +24,18 @@ jobs:
         id: gen-version
         run: |
           pnpm ci:version
+
       - run: pnpm build
-      - name: Login to NPM
-        run: npm adduser --registry=https://registry.npmjs.org/ --scope=@wenghongtian --always-auth
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_EMAIL: wenghongtian@gmail.com
-          NPM_USERNAME: wenghongtian
-          NPM_PASSWORD: ${{ secrets.NPM_PASSWORD }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
       - run: pnpm publish --no-git-checks --access public
         name: Publish To Npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - uses: actions/setup-node@v3
         with:
           node-version: 18
