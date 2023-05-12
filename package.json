@@ -1,7 +1,7 @@
 {
   "name": "@wenghongtian/react-virtual-list",
   "description": "React VirtualList",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "typings": "./lib/index.d.ts",
   "types": "./lib/index.d.ts",
