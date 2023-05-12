@@ -1,12 +1,8 @@
-name: Publish Package
+name: CI
 on:
   push:
     branches:
       - master
-
-env:
-  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   publish:
@@ -20,21 +16,14 @@ jobs:
           npm install -g pnpm
           pnpm install --store=node_modules/.pnpm-store
 
-      - name: Generate new version
-        id: gen-version
-        run: |
-          pnpm ci:version
-
-      - name: Commit changes
-        run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git commit -am "Submit Changeset"
-          
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: create and publish versions
+        uses: changesets/action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version: pnpm ci:version
+          commit: "ci: update versions"
+          title: "ci: update versions"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: pnpm build
 
