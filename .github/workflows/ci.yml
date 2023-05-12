@@ -16,32 +16,37 @@ jobs:
           npm install -g pnpm
           pnpm install --store=node_modules/.pnpm-store
 
+      - name: Build packge
+        run: pnpm build
+
       - name: create and publish versions
         uses: changesets/action@v1
         with:
           version: pnpm ci:version
           commit: "ci: update versions"
           title: "ci: update versions"
+          publish: "pnpm ci:publish"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: pnpm build
+      # - run: pnpm build
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: "https://registry.npmjs.org"
-      - run: pnpm publish --no-git-checks --access public
-        name: Publish To Npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18
+      #     registry-url: "https://registry.npmjs.org"
+      # - run: pnpm publish --no-git-checks --access public
+      #   name: Publish To Npm
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@wenghongtian"
-      - run: pnpm publish --no-git-checks --access public
-        name: Publish To Github
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18
+      #     registry-url: "https://npm.pkg.github.com"
+      #     scope: "@wenghongtian"
+      # - run: pnpm publish --no-git-checks --access public
+      #   name: Publish To Github
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
