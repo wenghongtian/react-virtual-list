@@ -30,8 +30,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - run: pnpm build
-
       # - uses: actions/setup-node@v3
       #   with:
       #     node-version: 18
@@ -41,12 +39,12 @@ jobs:
       #   env:
       #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 18
-      #     registry-url: "https://npm.pkg.github.com"
-      #     scope: "@wenghongtian"
-      # - run: pnpm publish --no-git-checks --access public
-      #   name: Publish To Github
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@wenghongtian"
+      - run: pnpm publish --no-git-checks --access public
+        name: Publish To Github
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
