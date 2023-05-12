@@ -24,13 +24,23 @@ jobs:
         id: gen-version
         run: |
           pnpm ci:version
+          echo "::set-output name=new_version::$(node -p -e "require('./package.json').version")" # 构建输出新的软件版本号
+
+      - name: Commit Version Bump
+        uses: EndBug/add-and-commit@v8
+        with:
+          author_name: wenghongtian
+          author_email: wenghongtian@gmail.com
+          message: 'Version bump to ${{ steps.version-step.outputs.new_version }}'
+          add: 'package.json'
+          push: true
 
       - run: pnpm build
 
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
       - run: pnpm publish --no-git-checks --access public
         name: Publish To Npm
         env:
@@ -39,8 +49,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@wenghongtian'
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@wenghongtian"
       - run: pnpm publish --no-git-checks --access public
         name: Publish To Github
         env:
