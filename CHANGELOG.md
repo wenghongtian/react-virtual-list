@@ -1,5 +1,11 @@
 # @wenghongtian/react-virtual-list
 
+## 1.0.5
+
+### Patch Changes
+
+- beb4d09: chore: ci
+
 ## 1.0.4
 
 ### Patch Changes
