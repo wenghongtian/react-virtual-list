@@ -24,16 +24,17 @@ jobs:
         id: gen-version
         run: |
           pnpm ci:version
-          echo "::set-output name=new_version::$(node -p -e "require('./package.json').version")" # 构建输出新的软件版本号
 
-      - name: Commit Version Bump
-        uses: EndBug/add-and-commit@v8
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git commit -am "Submit Changeset"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          author_name: wenghongtian
-          author_email: wenghongtian@gmail.com
-          message: 'Version bump to ${{ steps.version-step.outputs.new_version }}'
-          add: 'package.json'
-          push: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: pnpm build
 
